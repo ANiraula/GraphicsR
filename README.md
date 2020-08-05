@@ -1,38 +1,61 @@
-# R Reason Style Guide
+---
+title: "Reason Theme/Graphics"
+author: "Anil"
+date: "6/30/2020"
+output:
+  word_document: default
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
 
-### Reason Theme/Graphics
-### author: "Anil Niraula"
-### date: "6/30/2020"
-### doc: R Markdown
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
 
 This is an R Markdown document that describes Reason graphics style in R.
-It should help unify visualization using gggplo()
-Packages: `pensionviewr`, `reasonTheme` & `ggplot2`
+Packages: `ggplot2`, `pensionviewr` & `reasonTheme`
+
+##Defining
+- Reason color palette 
+- ggplot() themes, labels, and margins
 
 ```{r, out.length = "100px", out.width = "200px"}
 
 # All images should use web safe colors — this gives us a range of orange and blue
 # colors that fit with Reason’s branding, as well as reds and greens that we can use to
 # indicate positive or negative data patterns. The following colors are most suitable:
+#https://www.rapidtables.com/web/color/Web_Safe.html
 
 palette_reason <- data.frame(
   Orange = "#FF6633", 
+  LightOrange = "#FF9933",
   DarkGrey = "#333333", 
   SpaceGrey = "#A69FA1",
-  DarkBlue = "#1696d2",
+  DarkBlue = "#0066CC",
   GreyBlue = "#6699CC", 
   Yellow = "#FFCC33", 
-  LightBlue = "#3399CC", 
+  LightBlue = "#66B2FF", 
   SatBlue = "#3366CC", 
-  Green = "#669900", 
-  Red = "#CC0000")
-  
-##Convert color code to RedGreenBlue palette (with rgb())
-#rgb1 <- col2rgb(colors$SatBlue, alpha = FALSE)/255
-#rownames(rgb1) <- c("red", "green", "blue")
-#ColorName <- rgb(rgb1[1],rgb1[2],rgb1[3])
+  Green = "#669900",
+  LightGreen = "#00CC66",
+  Red = "#CC0000",
+  LightRed = "#FF0000")
+
+##Convert color code to RedGreenBlue palette (with rgb() function)
+rgb1 <- col2rgb(palette_reason$SatBlue, alpha = FALSE)/255
+rgb1
+rownames(rgb1) <- c("red", "green", "blue")
+ColorName <- rgb(rgb1[1],rgb1[2],rgb1[3])
+ColorName
+#Customize color code
+ColorName2 <- rgb(0.1,0.5,0.8)
+ColorName2
+
 #######
-for (i in (1:8)){
+for (i in (1:length(palette_reason))){
 x <- plot(c(5, 10), c(15, 30), type= "n", main=c(colnames(palette_reason[i])), xlab = "", 
 ylab = c(as.character(palette_reason[1,i])), xaxt="n", yaxt="n",cex.lab=1.5, cex.main=2)
 rect(5, 15, 10, 30, col = as.character(palette_reason[1,i]), border = "transparent")
@@ -40,32 +63,48 @@ rect(5, 15, 10, 30, col = as.character(palette_reason[1,i]), border = "transpare
 }
 ```
 
-## Standard Colors for graphics in R
+# Standardized R parameters:
 
-### Standardized Font: "Calibri"
-### Standardized graphics: ggpot() 
-### Standardized Theme: reasonTheme (
-      ##Main elements: line/rectangle/text
-           line = ggplot2::element_line(
-             rect = ggplot2::element_rect(
-               text = ggplot2::element_text(
-        
-        Plot elements: title/subtitle/caption/background/margin
-                 plot.title = ggplot2::element_text(
-                    plot.subtitle = ggplot2::element_text(
-                      plot.caption = ggplot2::element_text(
-                        plot.background = 
-                          plot.margin = 
-                      #Adjustable: text(size, angle,face(bold), margin)
+### Base R package: ggplot2 (main parts)
+- geometry (ex: line, bar, point, text)
+- scale (ex: x-axis, y-axis, color, shape)
+- mapping of data to scales (ex: car type maps to the x-axis)
+- theme (ex: title font, caption color)
+
+### Base Font: "Calibri"
+### Base Font size: 14.0
+### Base Line size: 0.5
+### Base Theme: reasonTheme (
+     #plot.title (size = base_size * 12 / 8.5, margin = ggplot2::margin(b = 10L))
+     #plot.margin (t = half_line,
+                                  r = base_line_size * 24,
+                                  b = half_line,
+                                  l = half_line)
+     #axis.title(face = "bold", size = base_size)
+     #axis.title.x(margin = ggplot2::margin(t = 8L))
+     #axis.title.y(angle = 90L,margin = ggplot2::margin(r = 4L))
+     #axis.ticks.length(4L, "pt")
+      
                     
-## What you have to specify in ggplo(): 
- ##Data to graph
- ##Y-axis & X-axis scales
- ##Title
+### What you have to specify in ggplot(), after setting Reason theme: 
+ - Data to use for the graph (in "data.frame" format)
+ - Y-axis & X-axis scales (`ticks = n`)
+ - Y-axis & X-axis limits (`limits = c(x,y)`)
+ - Colors (`color =` or `fill =`, using colors in `palette_reason`)
+ - Title (`ggtitle()`)
 
-## Excel Mountain of Debt Plot for PERSI plan
-  ![Original Debt Plot - PERSI](PERSI.Excel.graph.png)
+### Save plot with savePlot() function in ### "pensionviewr" package
+ - savePlot(debt.plot, source = "", save_filepath = "/Users/anilniraula/GraphicsR/PERSI.debtPlot2.jpeg",
+         width_pixels = 600, height_pixels = 400)
 
-## Latest R Mountain of Debt Plot using using deptPlot() from `pensionviewr`
-##Modified `deptPlot()` -> colors, remooved red line, edited year labels
+
+## Latest Mountain of Debt Plot using UPDATED* deptPlot() function from "pensionviewr"
+### Modified colors, ending ticks & year labels
   ![Latest Modified Debt Plot - PERSI](PERSI.debptPlot2.jpeg)
+
+## Original Mountain of Debt Plot using ORIGINAL deptPlot() function
+  ![Original Debt Plot - PERSI](graphs/DebtPlot.Orig.jpeg)
+  
+  
+```{r, echo=FALSE}
+```
