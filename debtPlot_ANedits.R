@@ -40,14 +40,19 @@ palette_reason <- data.table(
 ##Load list of plans
 pl <- planList()
 
-columns <- c("total_pension_liability_dollar", "wage_inflation",
-             "payroll_growth_assumption", "other_contribution_dollar",
-             "other_additions_dollar", "x1_year_investment_return_percentage",
-             "fiscal_year_of_contribution", "statutory_payment_dollar",
-             "statutory_payment_percentage")
+
 
 #Custom function to load filtered data from the database
 filteredData <- function(data, plan, fy){
+  columns <- c("total_pension_liability_dollar", "wage_inflation",
+               "payroll_growth_assumption", "other_contribution_dollar",
+               "other_additions_dollar", "x1_year_investment_return_percentage",
+               "amortizaton_method", "number_of_years_remaining_on_amortization_schedule",
+               "fiscal_year_of_contribution", "statutory_payment_dollar",
+               "statutory_payment_percentage", "discount_rate_assumption", "cost_structure",
+               "employer_normal_cost_percentage", "inflation_rate_assumption_for_gasb_reporting",
+               "total_number_of_members", "total_projected_actuarial_required_contribution_percentage_of_payroll")
+  
   Plan <- data.table(pullData(data, plan))
   ##Create missing columns for plans with no data for variables in "columns" vector
   for (i in (1:length(columns))){
@@ -57,17 +62,16 @@ filteredData <- function(data, plan, fy){
   ####
   Plan <- Plan[year > fy-1]
   Plan <- Plan %>%
-    select(
+     select(
       year,
       plan_name = display_name,
       state,
+      #data_source_name,#Added
       return_1yr = x1_year_investment_return_percentage,
       actuarial_cost_method_in_gasb_reporting,
       funded_ratio = actuarial_funded_ratio_percentage,
-      actuarial_valuation_report_date,
       ava = actuarial_value_of_assets_gasb_dollar,
       mva = market_value_of_assets_dollar,
-      mva_smooth = market_assets_reported_for_asset_smoothing,#added
       aal = actuarially_accrued_liabilities_dollar,
       tpl = total_pension_liability_dollar,
       adec = actuarially_required_contribution_dollar,
@@ -75,11 +79,11 @@ filteredData <- function(data, plan, fy){
       statutory = statutory_payment_dollar,#NEW
       statutory_pct = statutory_payment_percentage,#NEW
       amortizaton_method,
-      asset_valuation_method_for_gasb_reporting,
       total_benefit_payments = total_benefits_paid_dollar,#added
       benefit_payments = benefit_payments_dollar,
       refunds = refunds_dollar,#added
       admin_exp = administrative_expense_dollar,
+      cost_structure,
       payroll = covered_payroll_dollar,
       ee_contribution = employee_contribution_dollar,
       ee_nc_pct = employee_normal_cost_percentage,
@@ -92,6 +96,7 @@ filteredData <- function(data, plan, fy){
       fy_contribution = fiscal_year_of_contribution,
       inflation_assum = inflation_rate_assumption_for_gasb_reporting,
       arr = investment_return_assumption_for_gasb_reporting,
+      dr = discount_rate_assumption,#NEW
       number_of_years_remaining_on_amortization_schedule,
       payroll_growth_assumption,
       total_amortization_payment_pct = total_amortization_payment_percentage,
@@ -100,7 +105,7 @@ filteredData <- function(data, plan, fy){
       total_number_of_members,
       total_proj_adec_pct = total_projected_actuarial_required_contribution_percentage_of_payroll,
       type_of_employees_covered,
-      uaal = unfunded_actuarially_accrued_liabilities_dollar,
+      unfunded_actuarially_accrued_liabilities_dollar,
       wage_inflation
     )
 }
@@ -199,14 +204,19 @@ debtPlot <- function(data, title = NULL, caption = FALSE, grid = FALSE, ticks = 
                            paste(palette_reason$SpaceGrey),"white"),size = (1)))
 }
 ##Plot graph
+debtPlot(PERSI.debt,font = "Calibri")
+
 debt.plot  <- debtPlot(PERSI.debt,font = "Calibri")
 savePlot(debt.plot, source = "Source: PIP", save_filepath = "/Users/anilniraula/Downloads/test.png",
          width_pixels = 600, height_pixels = 400)
+
 #With Title, caption and grid
-debtPlot(PERSI.debt, "Idaho PERS Pension Debt", caption = TRUE, grid = TRUE, ticks = TRUE, font = "Verdana")
+debtPlot(PERSI.debt, "Idaho PERS Pension Debt", caption = TRUE, grid = TRUE, ticks = TRUE, font = "Calibri")
 #debtPlot(PERSI.debt, caption = F, grid = F, ticks = T)
 
 ############
+#View(PERSI.debt)
+#linePlot(PERSI.debt, PERSI.debt$arr, PERSI.debt$dr)
 
 #https://github.com/bbc/bbplot/blob/master/R/finalise_plot.R
 #save_plot <- function (plot_grid, width, height, save_filepath) {
