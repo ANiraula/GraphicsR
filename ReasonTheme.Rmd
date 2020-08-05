@@ -100,7 +100,7 @@ rect(5, 15, 10, 30, col = as.character(palette_reason[1,i]), border = "transpare
 
 ## Latest Mountain of Debt Plot using UPDATED* deptPlot() function from "pensionviewr"
 ### Modified colors, ending ticks & year labels
-  ![Latest Modified Debt Plot - PERSI](PERSI.debptPlot2.jpeg)
+  ![Latest Modified Debt Plot - PERSI](graphs/PERSI.debptPlot2.jpeg)
 
 ## Original Mountain of Debt Plot using ORIGINAL deptPlot() function
   ![Original Debt Plot - PERSI](graphs/DebtPlot.Orig.jpeg)
