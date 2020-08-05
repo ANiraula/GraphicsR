@@ -16,10 +16,10 @@ knitr::opts_chunk$set(echo = TRUE)
 ## R Markdown
 
 This is an R Markdown document that describes Reason graphics style in R.
-Packages: `pensionviewr` & `reasonTheme`
+Packages: `ggplot2`, `pensionviewr` & `reasonTheme`
 
 ##Defining
-- Colors
+- Reason color palette 
 - ggplot() themes, labels, and margins
 
 ```{r, out.length = "100px", out.width = "200px"}
@@ -44,7 +44,7 @@ palette_reason <- data.frame(
   Red = "#CC0000",
   LightRed = "#FF0000")
 
-##Convert color code to RedGreenBlue palette (with rgb())
+##Convert color code to RedGreenBlue palette (with rgb() function)
 rgb1 <- col2rgb(palette_reason$SatBlue, alpha = FALSE)/255
 rgb1
 rownames(rgb1) <- c("red", "green", "blue")
@@ -86,18 +86,23 @@ rect(5, 15, 10, 30, col = as.character(palette_reason[1,i]), border = "transpare
      #axis.ticks.length(4L, "pt")
       
                     
-### What you have to specify in ggplot(), after setting Reason theme, when you graph somthing in R: 
- - Data to use for the graph (data.frame)
+### What you have to specify in ggplot(), after setting Reason theme: 
+ - Data to use for the graph (in "data.frame" format)
  - Y-axis & X-axis scales (`ticks = n`)
  - Y-axis & X-axis limits (`limits = c(x,y)`)
  - Colors (`color =` or `fill =`, using colors in `palette_reason`)
  - Title (`ggtitle()`)
 
-## Latest Mountain of Debt Plot using deptPlot() from `pensionviewr`
+### Save plot with savePlot() function in ### "pensionviewr" package
+ - savePlot(debt.plot, source = "", save_filepath = "/Users/anilniraula/GraphicsR/PERSI.debtPlot2.jpeg",
+         width_pixels = 600, height_pixels = 400)
+
+
+## Latest Mountain of Debt Plot using UPDATED* deptPlot() function from "pensionviewr"
 ### Modified colors, ending ticks & year labels
   ![Latest Modified Debt Plot - PERSI](PERSI.debptPlot2.jpeg)
 
-## Original Mountain of Debt Plot using deptPlot() from `pensionviewr`
+## Original Mountain of Debt Plot using ORIGINAL deptPlot() function
   ![Original Debt Plot - PERSI](graphs/DebtPlot.Orig.jpeg)
   
   
